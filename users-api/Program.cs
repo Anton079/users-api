@@ -2,6 +2,7 @@ using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using System;
 using users_api.Data.Migrations;
+using users_api.Users.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,13 +18,15 @@ builder.Services.AddCors(options =>
  .AllowAnyMethod()));
 
 
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 
 options.UseMySql(builder.Configuration.GetConnectionString("Default")!,
 new MySqlServerVersion(new Version(8, 0, 21))));
 
-//builder.Services.AddScoped<ILibraryRepo, LibraryRepo>();
 
+
+builder.Services.AddScoped<IUserRepo,UserRepo>();
 builder.Services.AddFluentMigratorCore()
     .ConfigureRunner(rb => rb.AddMySql5()
     .WithGlobalConnectionString(builder.Configuration.GetConnectionString("Default"))
